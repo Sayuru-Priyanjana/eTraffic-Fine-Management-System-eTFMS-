@@ -1,0 +1,12 @@
+$kind: http-request
+name: Get all fines
+url: http://localhost:8080/api/categories/1
+method: GET
+body:
+  type: json
+  content: ""
+auth:
+  type: bearer
+  credentials:
+    token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbjEiLCJpYXQiOjE3ODEwOTIyNjQsImV4cCI6MTc4MTE3ODY2NH0.y1SOaq7Qe4M_yWvim2MD2c-fE6LtIKwy9utmmhIbS_w
+order: 5000
