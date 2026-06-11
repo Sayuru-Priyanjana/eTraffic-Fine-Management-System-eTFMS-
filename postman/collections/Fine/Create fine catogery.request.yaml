@@ -1,0 +1,19 @@
+$kind: http-request
+url: http://localhost:8080/api/categories
+method: POST
+body:
+  type: json
+  content: "{\r
+
+    \  \"identifier\": \"SPEEDING_TIER_1\",\r
+
+    \  \"description\": \"Speeding over 10km/h but less than 20km/h\",\r
+
+    \  \"amount\": 3000.0\r
+
+    }"
+auth:
+  type: bearer
+  credentials:
+    token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbjEiLCJpYXQiOjE3ODEwOTIyNjQsImV4cCI6MTc4MTE3ODY2NH0.y1SOaq7Qe4M_yWvim2MD2c-fE6LtIKwy9utmmhIbS_w
+order: 3000

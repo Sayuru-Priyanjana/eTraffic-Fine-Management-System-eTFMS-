@@ -1,0 +1,22 @@
+$kind: http-request
+name: Update Fine
+url: http://localhost:8080/api/fines/1
+method: PUT
+body:
+  type: json
+  content: "{\r
+
+    \  \"categoryIdentifier\": \"SPEEDING_TIER_1\",\r
+
+    \  \"driverId\": \"B-9876543\",\r
+
+    \  \"dueDate\": \"2026-12-31T23:59:59\",\r
+
+    \  \"status\": \"PAID\"\r
+
+    }"
+auth:
+  type: bearer
+  credentials:
+    token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbjEiLCJpYXQiOjE3ODEwOTIyNjQsImV4cCI6MTc4MTE3ODY2NH0.y1SOaq7Qe4M_yWvim2MD2c-fE6LtIKwy9utmmhIbS_w
+order: 3217608920795371
