@@ -1,18 +1,18 @@
 $kind: http-request
-name: Register a Driver
+name: Register a Admin
 url: http://localhost:8080/api/auth/register
 method: POST
 body:
   type: json
   content: "{\r
 
-    \  \"id\": \"d1\",\r
+    \  \"id\": \"a1\",\r
 
-    \  \"username\": \"driver1\",\r
+    \  \"username\": \"admin1\",\r
 
     \  \"password\": \"123456\",\r
 
-    \  \"role\": \"DRIVER\"\r
+    \  \"role\": \"ADMIN\"\r
 
     }\r\n"
-order: 2000
+order: 3368193910375155
