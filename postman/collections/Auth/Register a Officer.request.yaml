@@ -1,18 +1,18 @@
 $kind: http-request
-name: Register a Driver
+name: Register a Officer
 url: http://localhost:8080/api/auth/register
 method: POST
 body:
   type: json
   content: "{\r
 
-    \  \"id\": \"d1\",\r
+    \  \"id\": \"p1\",\r
 
-    \  \"username\": \"driver1\",\r
+    \  \"username\": \"test\",\r
 
     \  \"password\": \"123456\",\r
 
-    \  \"role\": \"DRIVER\"\r
+    \  \"role\": \"POLICE_OFFICER\"\r
 
     }\r\n"
-order: 2000
+order: 1676

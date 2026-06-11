@@ -1,0 +1,133 @@
+### Variables
+@baseUrl = http://localhost:8080/api
+@adminToken = your_admin_jwt_token_here
+@policeToken = your_police_jwt_token_here
+@driverToken = your_driver_jwt_token_here
+
+
+### 1. AUTHENTICATION APIs
+
+### Register Admin (ID is auto-generated)
+POST {{baseUrl}}/auth/register
+Content-Type: application/json
+
+{
+  "username": "admin1",
+  "password": "password123",
+  "role": "ADMIN"
+}
+
+### Login Admin
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "username": "admin1",
+  "password": "123456"
+}
+
+### Register Police Officer (Requires manual ID)
+POST {{baseUrl}}/auth/register
+Content-Type: application/json
+
+{
+  "id": "P-1001",
+  "username": "officer_john",
+  "password": "password123",
+  "role": "POLICE_OFFICER"
+}
+
+### Login Police Officer
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "username": "officer_john",
+  "password": "password123"
+}
+
+### Register Driver (Requires manual ID)
+POST {{baseUrl}}/auth/register
+Content-Type: application/json
+
+{
+  "id": "B-9876543",
+  "username": "driver_mike",
+  "password": "password123",
+  "role": "DRIVER"
+}
+
+
+### 2. CATEGORY APIs (Admin Only)
+
+### Create Category
+POST {{baseUrl}}/categories
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+  "identifier": "SPEEDING_TIER_1",
+  "description": "Speeding over 10km/h but less than 20km/h",
+  "amount": 3000.0
+}
+
+### Get All Categories (Open to all authenticated users)
+GET {{baseUrl}}/categories
+Authorization: Bearer {{policeToken}}
+
+### Update Category
+PUT {{baseUrl}}/categories/1
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+  "identifier": "SPEEDING_TIER_1",
+  "description": "Speeding over 10km/h but less than 20km/h",
+  "amount": 3500.0
+}
+
+
+### 3. FINE APIs
+
+### Create Fine (Police Officer)
+POST {{baseUrl}}/fines
+Authorization: Bearer {{policeToken}}
+Content-Type: application/json
+
+{
+  "categoryIdentifier": "SPEEDING_TIER_1",
+  "driverId": "B-9876543",
+  "dueDate": "2026-12-31T23:59:59"
+}
+
+### Get All Fines (Admin)
+GET {{baseUrl}}/fines
+Authorization: Bearer {{adminToken}}
+
+### Get Fines by Driver (Driver can view their own)
+GET {{baseUrl}}/fines/driver/B-9876543
+Authorization: Bearer {{driverToken}}
+
+### Get Fines by Officer (Officer can view their own)
+GET {{baseUrl}}/fines/officer/P-1001
+Authorization: Bearer {{policeToken}}
+
+### Update Fine Status (Police or Admin)
+PUT {{baseUrl}}/fines/1
+Authorization: Bearer {{policeToken}}
+Content-Type: application/json
+
+{
+  "categoryIdentifier": "SPEEDING_TIER_1",
+  "driverId": "B-9876543",
+  "dueDate": "2026-12-31T23:59:59",
+  "status": "PAID"
+}
+
+### Delete Fine (Admin Only)
+DELETE {{baseUrl}}/fines/1
+Authorization: Bearer {{adminToken}}
+
+### Delete Category (Admin Only)
+DELETE {{baseUrl}}/categories/1
+Authorization: Bearer {{adminToken}}
