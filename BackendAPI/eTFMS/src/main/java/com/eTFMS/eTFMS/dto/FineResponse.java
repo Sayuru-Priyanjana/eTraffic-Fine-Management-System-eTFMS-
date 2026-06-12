@@ -16,7 +16,7 @@ public class FineResponse {
     
     private Long id;
     private String referenceNumber;
-    private String categoryIdentifier;
+    private Long categoryId;
     private String driverId;
     private String officerId;
     private Double amount;

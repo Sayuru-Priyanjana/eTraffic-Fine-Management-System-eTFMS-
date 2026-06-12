@@ -23,12 +23,12 @@ public class FineService {
     private final FineCategoryRepository fineCategoryRepository;
 
     public FineResponse createFine(FineRequest request, String officerId) {
-        FineCategory category = fineCategoryRepository.findByIdentifier(request.getCategoryIdentifier())
-                .orElseThrow(() -> new IllegalArgumentException("Invalid category identifier"));
+        FineCategory category = fineCategoryRepository.findById(request.getCategoryId())
+                .orElseThrow(() -> new IllegalArgumentException("Invalid category ID"));
 
         Fine fine = Fine.builder()
                 .referenceNumber("FIN-" + UUID.randomUUID().toString().substring(0, 8).toUpperCase())
-                .categoryIdentifier(request.getCategoryIdentifier())
+                .categoryId(request.getCategoryId())
                 .driverId(request.getDriverId())
                 .officerId(officerId)
                 .amount(category.getAmount())
@@ -63,10 +63,10 @@ public class FineService {
         Fine fine = fineRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Fine not found with id: " + id));
 
-        FineCategory category = fineCategoryRepository.findByIdentifier(request.getCategoryIdentifier())
-                .orElseThrow(() -> new IllegalArgumentException("Invalid category identifier"));
+        FineCategory category = fineCategoryRepository.findById(request.getCategoryId())
+                .orElseThrow(() -> new IllegalArgumentException("Invalid category ID"));
 
-        fine.setCategoryIdentifier(request.getCategoryIdentifier());
+        fine.setCategoryId(request.getCategoryId());
         fine.setDriverId(request.getDriverId());
         fine.setAmount(category.getAmount());
         fine.setDueDate(request.getDueDate());
@@ -107,7 +107,7 @@ public class FineService {
         return FineResponse.builder()
                 .id(fine.getId())
                 .referenceNumber(fine.getReferenceNumber())
-                .categoryIdentifier(fine.getCategoryIdentifier())
+                .categoryId(fine.getCategoryId())
                 .driverId(fine.getDriverId())
                 .officerId(fine.getOfficerId())
                 .amount(fine.getAmount())

@@ -73,6 +73,7 @@ The application uses JWT tokens for security. You must first register/login to o
     ```
 
 ### Fine Categories (`/api/categories`)
+*(Requires **Admin Token** for modifications. **Police Token** can be used to list categories)*
 *   `GET /api/categories`: List all fine categories.
 *   `POST /api/categories`: Create a new category *(Admin Only)*.
     ```json
@@ -93,10 +94,11 @@ The application uses JWT tokens for security. You must first register/login to o
 *   `DELETE /api/categories/{id}`: Delete a category *(Admin Only)*.
 
 ### Fines (`/api/fines`)
+*(Requires **Admin Token** for full access, **Police Token** to issue/view, and **Driver Token** to view own fines and settle)*
 *   `POST /api/fines`: Issue a new fine *(Police/Admin)*.
     ```json
     {
-      "categoryIdentifier": "SPEEDING_TIER_1",
+      "categoryId": 1,
       "driverId": "B-9876543",
       "dueDate": "2026-12-31T23:59:59"
     }
@@ -107,7 +109,7 @@ The application uses JWT tokens for security. You must first register/login to o
 *   `PUT /api/fines/{id}`: Update fine details/status *(Police/Admin)*.
     ```json
     {
-      "categoryIdentifier": "SPEEDING_TIER_1",
+      "categoryId": 1,
       "driverId": "B-9876543",
       "dueDate": "2026-12-31T23:59:59",
       "status": "PAID"
