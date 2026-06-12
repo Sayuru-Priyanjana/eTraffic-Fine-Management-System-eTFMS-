@@ -31,7 +31,7 @@ public class Fine {
     private String referenceNumber;
 
     @Column(nullable = false)
-    private String categoryIdentifier;
+    private Long categoryId;
 
     @Column(nullable = false)
     private String driverId;

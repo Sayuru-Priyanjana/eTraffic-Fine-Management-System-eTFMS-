@@ -18,8 +18,8 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class FineRequest {
 
-    @NotBlank(message = "Category identifier is required")
-    private String categoryIdentifier;
+    @NotNull(message = "Category ID is required")
+    private Long categoryId;
 
     @NotBlank(message = "Driver ID is required")
     private String driverId;

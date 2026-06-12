@@ -95,7 +95,7 @@ Authorization: Bearer {{policeToken}}
 Content-Type: application/json
 
 {
-  "categoryIdentifier": "SPEEDING_TIER_1",
+  "categoryId": 1,
   "driverId": "B-9876543",
   "dueDate": "2026-12-31T23:59:59"
 }
@@ -118,7 +118,7 @@ Authorization: Bearer {{policeToken}}
 Content-Type: application/json
 
 {
-  "categoryIdentifier": "SPEEDING_TIER_1",
+  "categoryId": 1,
   "driverId": "B-9876543",
   "dueDate": "2026-12-31T23:59:59",
   "status": "PAID"
