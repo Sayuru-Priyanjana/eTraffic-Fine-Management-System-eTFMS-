@@ -23,7 +23,7 @@ Content-Type: application/json
 
 {
   "username": "admin1",
-  "password": "123456"
+  "password": "password123"
 }
 
 ### Register Police Officer (Requires manual ID)
