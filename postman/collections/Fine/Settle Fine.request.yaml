@@ -1,0 +1,12 @@
+$kind: http-request
+name: Settle Fine
+url: http://localhost:8080/api/fines/1/settle
+method: POST
+body:
+  type: json
+  content: ""
+auth:
+  type: bearer
+  credentials:
+    token: ""
+order: 8211

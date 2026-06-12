@@ -131,3 +131,7 @@ Authorization: Bearer {{adminToken}}
 ### Delete Category (Admin Only)
 DELETE {{baseUrl}}/categories/1
 Authorization: Bearer {{adminToken}}
+
+### Settle Fine (Driver Only)
+POST {{baseUrl}}/fines/1/settle
+Authorization: Bearer {{driverToken}}
