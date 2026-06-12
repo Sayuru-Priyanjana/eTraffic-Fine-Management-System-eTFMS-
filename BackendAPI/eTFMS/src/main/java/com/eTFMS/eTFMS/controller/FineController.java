@@ -81,4 +81,14 @@ public class FineController {
         fineService.deleteFine(id);
         return ResponseEntity.noContent().build();
     }
+
+    @PostMapping("/{id}/settle")
+    @PreAuthorize("hasRole('DRIVER')")
+    public ResponseEntity<FineResponse> settleFine(
+            @PathVariable Long id,
+            Authentication authentication
+    ) {
+        com.eTFMS.eTFMS.model.User user = (com.eTFMS.eTFMS.model.User) authentication.getPrincipal();
+        return ResponseEntity.ok(fineService.settleFine(id, user.getId()));
+    }
 }

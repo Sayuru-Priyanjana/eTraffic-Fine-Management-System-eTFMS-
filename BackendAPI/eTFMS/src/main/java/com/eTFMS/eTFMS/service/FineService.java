@@ -86,6 +86,23 @@ public class FineService {
         fineRepository.deleteById(id);
     }
 
+    public FineResponse settleFine(Long id, String driverId) {
+        Fine fine = fineRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Fine not found with id: " + id));
+
+        if (!fine.getDriverId().equals(driverId)) {
+            throw new IllegalArgumentException("You can only settle your own fines");
+        }
+        
+        if (fine.getStatus() == FineStatus.PAID) {
+            throw new IllegalArgumentException("Fine is already settled");
+        }
+
+        fine.setStatus(FineStatus.PAID);
+        fine = fineRepository.save(fine);
+        return mapToResponse(fine);
+    }
+
     private FineResponse mapToResponse(Fine fine) {
         return FineResponse.builder()
                 .id(fine.getId())
