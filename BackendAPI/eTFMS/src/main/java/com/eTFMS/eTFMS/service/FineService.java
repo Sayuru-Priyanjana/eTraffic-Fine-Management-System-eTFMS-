@@ -100,6 +100,37 @@ public class FineService {
 
         fine.setStatus(FineStatus.PAID);
         fine = fineRepository.save(fine);
+        
+        // Simulate SMS sending
+        System.out.println("[SMS NOTIFICATION] Sent to officer " + fine.getOfficerId() + 
+                           " (license retrieve allowed): Fine " + fine.getReferenceNumber() + 
+                           " has been successfully settled via Web SPA.");
+
+        return mapToResponse(fine);
+    }
+
+    public FineResponse lookupFinePublic(String referenceNumber, Long categoryId) {
+        Fine fine = fineRepository.findByReferenceNumberAndCategoryId(referenceNumber, categoryId)
+                .orElseThrow(() -> new IllegalArgumentException("No fine found with the given Reference Number and Category"));
+        return mapToResponse(fine);
+    }
+
+    public FineResponse settleFinePublic(String referenceNumber, Long categoryId) {
+        Fine fine = fineRepository.findByReferenceNumberAndCategoryId(referenceNumber, categoryId)
+                .orElseThrow(() -> new IllegalArgumentException("No fine found with the given Reference Number and Category"));
+
+        if (fine.getStatus() == FineStatus.PAID) {
+            throw new IllegalArgumentException("This fine is already settled.");
+        }
+
+        fine.setStatus(FineStatus.PAID);
+        fine = fineRepository.save(fine);
+
+        // Simulate SMS sending
+        System.out.println("[SMS NOTIFICATION] Sent to officer " + fine.getOfficerId() + 
+                           " (license retrieve allowed): Fine " + fine.getReferenceNumber() + 
+                           " has been successfully settled publicly via Web SPA.");
+
         return mapToResponse(fine);
     }
 
