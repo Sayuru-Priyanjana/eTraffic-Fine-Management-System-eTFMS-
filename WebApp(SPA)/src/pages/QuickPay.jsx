@@ -7,7 +7,6 @@ export default function QuickPay() {
   const navigate = useNavigate();
   const [categories, setCategories] = useState([]);
   const [referenceNumber, setReferenceNumber] = useState('');
-  const [categoryId, setCategoryId] = useState('');
   
   const [isLoading, setIsLoading] = useState(false);
   const [searchError, setSearchError] = useState('');
@@ -43,11 +42,11 @@ export default function QuickPay() {
 
     try {
       const response = await api.get('/fines/public/lookup', {
-        params: { referenceNumber: referenceNumber.trim(), categoryId }
+        params: { referenceNumber: referenceNumber.trim() }
       });
       setFineDetails(response.data);
     } catch (err) {
-      setSearchError(err.response?.data?.message || 'Fine not found. Please verify the Reference Number and Category.');
+      setSearchError(err.response?.data?.message || 'Fine not found. Please verify the Reference Number.');
     } finally {
       setIsLoading(false);
     }
@@ -77,7 +76,7 @@ export default function QuickPay() {
 
     try {
       const response = await api.post('/fines/public/settle', null, {
-        params: { referenceNumber: fineDetails.referenceNumber, categoryId: fineDetails.categoryId }
+        params: { referenceNumber: fineDetails.referenceNumber }
       });
       
       // Navigate to payment success page, passing the fine details
@@ -152,23 +151,6 @@ export default function QuickPay() {
                 />
                 <Search className="absolute right-3 top-3.5 h-4 w-4 text-slate-500" />
               </div>
-            </div>
-
-            <div className="space-y-2">
-              <label className="text-xs font-semibold uppercase tracking-wider text-slate-400">Fine Category</label>
-              <select
-                required
-                className="w-full bg-slate-900 border border-slate-800 rounded-xl py-3 px-4 text-sm focus:outline-none focus:border-blue-500 text-white transition-colors"
-                value={categoryId}
-                onChange={(e) => setCategoryId(e.target.value)}
-              >
-                <option value="">Select fine category...</option>
-                {categories.map((cat) => (
-                  <option key={cat.id} value={cat.id}>
-                    {cat.identifier.replace(/_/g, ' ')} - LKR {cat.amount.toLocaleString()}
-                  </option>
-                ))}
-              </select>
             </div>
 
             <button

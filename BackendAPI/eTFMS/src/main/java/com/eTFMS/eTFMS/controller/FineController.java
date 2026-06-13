@@ -94,17 +94,15 @@ public class FineController {
 
     @GetMapping("/public/lookup")
     public ResponseEntity<FineResponse> lookupFinePublic(
-            @org.springframework.web.bind.annotation.RequestParam String referenceNumber,
-            @org.springframework.web.bind.annotation.RequestParam Long categoryId
+            @org.springframework.web.bind.annotation.RequestParam String referenceNumber
     ) {
-        return ResponseEntity.ok(fineService.lookupFinePublic(referenceNumber, categoryId));
+        return ResponseEntity.ok(fineService.lookupFinePublic(referenceNumber));
     }
 
     @PostMapping("/public/settle")
     public ResponseEntity<FineResponse> settleFinePublic(
-            @org.springframework.web.bind.annotation.RequestParam String referenceNumber,
-            @org.springframework.web.bind.annotation.RequestParam Long categoryId
+            @org.springframework.web.bind.annotation.RequestParam String referenceNumber
     ) {
-        return ResponseEntity.ok(fineService.settleFinePublic(referenceNumber, categoryId));
+        return ResponseEntity.ok(fineService.settleFinePublic(referenceNumber));
     }
 }

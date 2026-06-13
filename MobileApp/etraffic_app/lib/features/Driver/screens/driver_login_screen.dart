@@ -96,17 +96,18 @@ class _DriverLoginScreenState extends ConsumerState<DriverLoginScreen> {
                     // Username Field
                     TextFormField(
                       controller: _usernameController,
-                      keyboardType: TextInputType.name,
+                      keyboardType: TextInputType.text,
+                      textCapitalization: TextCapitalization.characters,
                       textInputAction: TextInputAction.next,
                       validator: (value) {
                         if (value == null || value.trim().isEmpty) {
-                          return 'Please enter your username';
+                          return 'Please enter your license ID';
                         }
                         return null;
                       },
                       decoration: const InputDecoration(
-                        labelText: 'Username',
-                        prefixIcon: Icon(Icons.person_outline),
+                        labelText: 'Driver / Police License ID',
+                        prefixIcon: Icon(Icons.badge_outlined),
                       ),
                     ),
                     const SizedBox(height: 16.0),

@@ -6,11 +6,18 @@ import '../../../core/state/auth_provider.dart';
 import '../../../core/theme/app_theme.dart';
 import '../state/driver_provider.dart';
 
-class DriverDashboardScreen extends ConsumerWidget {
+class DriverDashboardScreen extends ConsumerStatefulWidget {
   const DriverDashboardScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<DriverDashboardScreen> createState() => _DriverDashboardScreenState();
+}
+
+class _DriverDashboardScreenState extends ConsumerState<DriverDashboardScreen> {
+  int _tabIndex = 0;
+
+  @override
+  Widget build(BuildContext context) {
     final authState = ref.watch(authProvider);
     final finesState = ref.watch(driverFinesProvider);
 
@@ -18,6 +25,8 @@ class DriverDashboardScreen extends ConsumerWidget {
     final paidFines = finesState.fines.where((f) => f.status == 'PAID').toList();
 
     final totalOutstanding = pendingFines.fold<double>(0, (sum, item) => sum + item.amount);
+    
+    final currentFinesList = _tabIndex == 0 ? pendingFines : paidFines;
 
     return Scaffold(
       appBar: AppBar(
@@ -152,11 +161,16 @@ class DriverDashboardScreen extends ConsumerWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    const TabBar(
+                    TabBar(
                       labelColor: AppTheme.primaryColor,
                       unselectedLabelColor: AppTheme.lightTextSecondary,
                       indicatorColor: AppTheme.primaryColor,
-                      tabs: [
+                      onTap: (index) {
+                        setState(() {
+                          _tabIndex = index;
+                        });
+                      },
+                      tabs: const [
                         Tab(text: 'Pending Fines'),
                         Tab(text: 'Payment History'),
                       ],
@@ -181,10 +195,7 @@ class DriverDashboardScreen extends ConsumerWidget {
                         ),
                       )
                     else ...[
-                      // We list them directly based on selected index or combine in views.
-                      // For a simple single page dashboard we will display pending fines first.
-                      // Let's implement an interactive list.
-                      if (finesState.fines.isEmpty)
+                      if (currentFinesList.isEmpty)
                         Center(
                           child: Padding(
                             padding: const EdgeInsets.symmetric(vertical: 60.0),
@@ -193,7 +204,7 @@ class DriverDashboardScreen extends ConsumerWidget {
                                 Icon(Icons.check_circle_outline, size: 64, color: Colors.grey.shade400),
                                 const SizedBox(height: 16),
                                 Text(
-                                  'No fines found.',
+                                  _tabIndex == 0 ? 'No pending fines found.' : 'No payment history found.',
                                   style: TextStyle(color: Colors.grey.shade500, fontSize: 16),
                                 ),
                               ],
@@ -202,16 +213,16 @@ class DriverDashboardScreen extends ConsumerWidget {
                         )
                       else ...[
                         Text(
-                          'Active Notifications / Violations',
+                          _tabIndex == 0 ? 'Active Notifications / Violations' : 'Settled Violations',
                           style: Theme.of(context).textTheme.titleLarge,
                         ),
                         const SizedBox(height: 12),
                         ListView.builder(
                           shrinkWrap: true,
                           physics: const NeverScrollableScrollPhysics(),
-                          itemCount: finesState.fines.length,
+                          itemCount: currentFinesList.length,
                           itemBuilder: (context, index) {
-                            final fine = finesState.fines[index];
+                            final fine = currentFinesList[index];
                             final isPending = fine.status == 'PENDING';
                             return Card(
                               margin: const EdgeInsets.only(bottom: 16),
@@ -239,6 +250,8 @@ class DriverDashboardScreen extends ConsumerWidget {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     const SizedBox(height: 4),
+                                    if (fine.categoryName != null)
+                                      Text(fine.categoryName!, style: const TextStyle(fontWeight: FontWeight.w500)),
                                     Text('Due: ${DateFormat('yyyy-MM-dd').format(fine.dueDate)}'),
                                     const SizedBox(height: 2),
                                     Text(

@@ -2,6 +2,7 @@ class Fine {
   final int id;
   final String referenceNumber;
   final int categoryId;
+  final String? categoryName;
   final String driverId;
   final String officerId;
   final double amount;
@@ -13,6 +14,7 @@ class Fine {
     required this.id,
     required this.referenceNumber,
     required this.categoryId,
+    this.categoryName,
     required this.driverId,
     required this.officerId,
     required this.amount,
@@ -26,6 +28,7 @@ class Fine {
       id: json['id'] as int,
       referenceNumber: json['referenceNumber'] as String,
       categoryId: json['categoryId'] as int,
+      categoryName: json['categoryName'] as String?,
       driverId: json['driverId'] as String,
       officerId: json['officerId'] as String,
       amount: (json['amount'] as num).toDouble(),

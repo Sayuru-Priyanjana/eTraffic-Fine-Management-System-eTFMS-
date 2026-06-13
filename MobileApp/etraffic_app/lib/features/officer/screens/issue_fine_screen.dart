@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:go_router/go_router.dart';
 import '../../../core/models/fine_category.dart';
+import '../../../core/network/api_client.dart';
 import '../../../core/theme/app_theme.dart';
 import '../state/officer_provider.dart';
 
@@ -18,6 +19,10 @@ class _IssueFineScreenState extends ConsumerState<IssueFineScreen> {
   final _driverIdController = TextEditingController();
   FineCategory? _selectedCategory;
   DateTime? _selectedDueDate;
+  
+  bool _isSearchingDriver = false;
+  Map<String, dynamic>? _driverDetails;
+  String? _driverSearchError;
 
   @override
   void initState() {
@@ -55,6 +60,34 @@ class _IssueFineScreenState extends ConsumerState<IssueFineScreen> {
     if (picked != null) {
       setState(() {
         _selectedDueDate = DateTime(picked.year, picked.month, picked.day, 23, 59, 59);
+      });
+    }
+  }
+
+  Future<void> _searchDriver() async {
+    final driverId = _driverIdController.text.trim();
+    if (driverId.isEmpty) return;
+
+    setState(() {
+      _isSearchingDriver = true;
+      _driverSearchError = null;
+      _driverDetails = null;
+    });
+
+    try {
+      final response = await api.dio.get('/users/$driverId');
+      if (response.statusCode == 200 && response.data != null) {
+        setState(() {
+          _driverDetails = response.data;
+        });
+      }
+    } catch (e) {
+      setState(() {
+        _driverSearchError = 'Driver not found.';
+      });
+    } finally {
+      setState(() {
+        _isSearchingDriver = false;
       });
     }
   }
@@ -176,23 +209,85 @@ class _IssueFineScreenState extends ConsumerState<IssueFineScreen> {
                 ),
                 const SizedBox(height: 32),
 
-                // Driver ID (License)
-                TextFormField(
-                  controller: _driverIdController,
-                  textCapitalization: TextCapitalization.characters,
-                  textInputAction: TextInputAction.next,
-                  validator: (value) {
-                    if (value == null || value.trim().isEmpty) {
-                      return 'Driver License Number is required';
-                    }
-                    return null;
-                  },
-                  decoration: const InputDecoration(
-                    labelText: 'Driver License ID',
-                    prefixIcon: Icon(Icons.badge_outlined),
-                    hintText: 'e.g. B-9876543',
-                  ),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Expanded(
+                      child: TextFormField(
+                        controller: _driverIdController,
+                        textCapitalization: TextCapitalization.characters,
+                        textInputAction: TextInputAction.search,
+                        onFieldSubmitted: (_) => _searchDriver(),
+                        validator: (value) {
+                          if (value == null || value.trim().isEmpty) {
+                            return 'Driver License Number is required';
+                          }
+                          return null;
+                        },
+                        decoration: const InputDecoration(
+                          labelText: 'Driver License ID',
+                          prefixIcon: Icon(Icons.badge_outlined),
+                          hintText: 'e.g. B-9876543',
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    SizedBox(
+                      height: 56,
+                      child: ElevatedButton(
+                        onPressed: _isSearchingDriver ? null : _searchDriver,
+                        style: ElevatedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          padding: const EdgeInsets.symmetric(horizontal: 16),
+                        ),
+                        child: _isSearchingDriver 
+                            ? const SizedBox(width: 24, height: 24, child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2))
+                            : const Text('SEARCH'),
+                      ),
+                    ),
+                  ],
                 ),
+                if (_driverSearchError != null)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 8.0),
+                    child: Text(
+                      _driverSearchError!,
+                      style: const TextStyle(color: AppTheme.dangerColor, fontSize: 12),
+                    ),
+                  )
+                else if (_driverDetails != null)
+                  Container(
+                    margin: const EdgeInsets.only(top: 12),
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: AppTheme.successColor.withOpacity(0.1),
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(color: AppTheme.successColor.withOpacity(0.3)),
+                    ),
+                    child: Row(
+                      children: [
+                        const Icon(Icons.check_circle, color: AppTheme.successColor),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Driver Verified: ${_driverDetails!['username'] ?? 'Unknown'}',
+                                style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.black87),
+                              ),
+                              Text(
+                                'ID: ${_driverDetails!['id']}',
+                                style: TextStyle(fontSize: 12, color: Colors.grey.shade700),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                 const SizedBox(height: 20),
 
                 // Fine Category dropdown

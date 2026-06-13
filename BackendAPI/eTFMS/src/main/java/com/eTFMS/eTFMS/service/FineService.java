@@ -109,15 +109,15 @@ public class FineService {
         return mapToResponse(fine);
     }
 
-    public FineResponse lookupFinePublic(String referenceNumber, Long categoryId) {
-        Fine fine = fineRepository.findByReferenceNumberAndCategoryId(referenceNumber, categoryId)
-                .orElseThrow(() -> new IllegalArgumentException("No fine found with the given Reference Number and Category"));
+    public FineResponse lookupFinePublic(String referenceNumber) {
+        Fine fine = fineRepository.findByReferenceNumber(referenceNumber)
+                .orElseThrow(() -> new IllegalArgumentException("No fine found with the given Reference Number"));
         return mapToResponse(fine);
     }
 
-    public FineResponse settleFinePublic(String referenceNumber, Long categoryId) {
-        Fine fine = fineRepository.findByReferenceNumberAndCategoryId(referenceNumber, categoryId)
-                .orElseThrow(() -> new IllegalArgumentException("No fine found with the given Reference Number and Category"));
+    public FineResponse settleFinePublic(String referenceNumber) {
+        Fine fine = fineRepository.findByReferenceNumber(referenceNumber)
+                .orElseThrow(() -> new IllegalArgumentException("No fine found with the given Reference Number"));
 
         if (fine.getStatus() == FineStatus.PAID) {
             throw new IllegalArgumentException("This fine is already settled.");
@@ -135,10 +135,15 @@ public class FineService {
     }
 
     private FineResponse mapToResponse(Fine fine) {
+        String categoryName = fineCategoryRepository.findById(fine.getCategoryId())
+                .map(FineCategory::getIdentifier)
+                .orElse("Unknown Category");
+                
         return FineResponse.builder()
                 .id(fine.getId())
                 .referenceNumber(fine.getReferenceNumber())
                 .categoryId(fine.getCategoryId())
+                .categoryName(categoryName)
                 .driverId(fine.getDriverId())
                 .officerId(fine.getOfficerId())
                 .amount(fine.getAmount())

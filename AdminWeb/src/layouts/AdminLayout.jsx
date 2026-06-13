@@ -5,10 +5,10 @@ import Navbar from '../components/Navbar';
 export default function AdminLayout() {
   const token = localStorage.getItem('token');
   
-  // Commented out to allow Dashboard to be the first page as requested
-  // if (!token) {
-  //   return <Navigate to="/login" replace />;
-  // }
+  // Enforce login so we have a token to fetch protected data
+  if (!token) {
+    return <Navigate to="/login" replace />;
+  }
 
   return (
     <div className="flex h-screen bg-gray-50 overflow-hidden">

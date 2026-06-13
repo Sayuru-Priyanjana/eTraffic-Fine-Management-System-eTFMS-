@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { CreditCard, Shield, UserCheck, ArrowRight, Activity, BellRing } from 'lucide-react';
+import { CreditCard, ArrowRight, Activity } from 'lucide-react';
 
 export default function Landing() {
   return (
@@ -16,50 +16,29 @@ export default function Landing() {
           Modernizing Traffic Fine Payments in <span className="bg-gradient-to-r from-blue-500 via-indigo-400 to-emerald-400 bg-clip-text text-transparent">Sri Lanka</span>
         </h1>
         <p className="text-lg text-slate-400 font-medium max-w-xl mx-auto leading-relaxed">
-          Settle your traffic fines instantly using our secure digital payment portal. Get SMS verification to retrieve your driver's license on the spot.
+          Pay fine from anywhere using our secure digital payment portal. Get SMS verification to retrieve your driver's license on the spot.
         </p>
       </div>
 
       {/* Main Choice Grid */}
-      <div className="grid md:grid-cols-2 gap-8 w-full max-w-4xl mb-20">
+      <div className="flex justify-center w-full max-w-2xl mb-20">
         {/* Quick Pay Fine Card */}
         <Link 
           to="/quick-pay" 
-          className="group relative glass-panel glass-panel-hover transition-all-300 p-8 rounded-2xl flex flex-col justify-between overflow-hidden glow-primary"
+          className="group w-full relative glass-panel glass-panel-hover transition-all-300 p-8 rounded-2xl flex flex-col justify-between overflow-hidden glow-primary text-center items-center"
         >
           <div className="absolute top-0 right-0 w-32 h-32 bg-blue-500/10 rounded-full blur-2xl -mr-16 -mt-16 group-hover:bg-blue-500/20 transition-all"></div>
-          <div>
+          <div className="flex flex-col items-center">
             <div className="p-3 bg-blue-600/20 rounded-xl text-blue-400 inline-block mb-6 border border-blue-500/20 group-hover:bg-blue-600 group-hover:text-white transition-all">
               <CreditCard className="h-8 w-8" />
             </div>
-            <h3 className="text-2xl font-bold text-white mb-2 font-display">Quick Pay</h3>
-            <p className="text-slate-400 text-sm leading-relaxed mb-6">
-              Pay your fine instantly without logging in. Just enter the reference number and category identifier from your fine sheet.
+            <h3 className="text-2xl font-bold text-white mb-2 font-display">Pay fine from anywhere</h3>
+            <p className="text-slate-400 text-sm leading-relaxed mb-6 max-w-sm">
+              Pay your fine instantly. Just enter the reference number from your fine sheet.
             </p>
           </div>
           <div className="flex items-center text-sm font-semibold text-blue-400 group-hover:text-blue-300">
             <span>Pay Fine Now</span>
-            <ArrowRight className="ml-2 h-4 w-4 transform group-hover:translate-x-1 transition-transform" />
-          </div>
-        </Link>
-
-        {/* Driver Portal Card */}
-        <Link 
-          to="/login" 
-          className="group relative glass-panel glass-panel-hover transition-all-300 p-8 rounded-2xl flex flex-col justify-between overflow-hidden glow-emerald"
-        >
-          <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-500/10 rounded-full blur-2xl -mr-16 -mt-16 group-hover:bg-emerald-500/20 transition-all"></div>
-          <div>
-            <div className="p-3 bg-emerald-600/20 rounded-xl text-emerald-400 inline-block mb-6 border border-emerald-500/20 group-hover:bg-emerald-600 group-hover:text-white transition-all">
-              <UserCheck className="h-8 w-8" />
-            </div>
-            <h3 className="text-2xl font-bold text-white mb-2 font-display">Driver Portal</h3>
-            <p className="text-slate-400 text-sm leading-relaxed mb-6">
-              Sign in to manage your driving profile, review your full traffic fine history, track pending collections, and print official receipts.
-            </p>
-          </div>
-          <div className="flex items-center text-sm font-semibold text-emerald-400 group-hover:text-emerald-300">
-            <span>Access Portal</span>
             <ArrowRight className="ml-2 h-4 w-4 transform group-hover:translate-x-1 transition-transform" />
           </div>
         </Link>
@@ -73,7 +52,7 @@ export default function Landing() {
             <div className="w-12 h-12 rounded-full bg-slate-900 border border-slate-800 text-slate-300 flex items-center justify-center mx-auto text-lg font-bold">1</div>
             <h4 className="font-semibold text-white">Fine Sheet Issued</h4>
             <p className="text-xs text-slate-400 leading-relaxed">
-              Officer stops you and issues a ticket containing a unique fine reference number and category identifier.
+              Officer stops you and issues a ticket containing a unique fine reference number.
             </p>
           </div>
           <div className="text-center space-y-3">

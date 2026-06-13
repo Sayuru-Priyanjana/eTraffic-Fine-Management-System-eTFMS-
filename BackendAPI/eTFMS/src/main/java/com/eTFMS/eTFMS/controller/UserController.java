@@ -27,6 +27,12 @@ public class UserController {
         return ResponseEntity.ok(userService.getUsersByRole(role));
     }
 
+    @GetMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'POLICE_OFFICER')")
+    public ResponseEntity<UserResponse> getUserById(@PathVariable String id) {
+        return ResponseEntity.ok(userService.getUserById(id));
+    }
+
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<UserResponse> createUser(@Valid @RequestBody RegisterRequest request) {

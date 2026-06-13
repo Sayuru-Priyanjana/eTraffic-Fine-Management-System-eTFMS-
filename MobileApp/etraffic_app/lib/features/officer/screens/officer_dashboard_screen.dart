@@ -196,6 +196,8 @@ class OfficerDashboardScreen extends ConsumerWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             const SizedBox(height: 4),
+                            if (fine.categoryName != null)
+                              Text('Violation: ${fine.categoryName}'),
                             Text('Driver ID: ${fine.driverId}'),
                             Text('Issued: ${DateFormat('yyyy-MM-dd').format(fine.issueDate)}'),
                           ],

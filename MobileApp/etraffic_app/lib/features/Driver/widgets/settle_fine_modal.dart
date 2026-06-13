@@ -116,6 +116,133 @@ class _SettleFineModalState extends ConsumerState<SettleFineModal> {
               ),
               const SizedBox(height: 24),
 
+              // Interactive Credit Card
+              AnimatedBuilder(
+                animation: Listenable.merge([
+                  _cardNumberController,
+                  _expiryController,
+                  _nameController,
+                  _cvvController,
+                ]),
+                builder: (context, _) {
+                  final cardNumber = _cardNumberController.text.isEmpty
+                      ? '•••• •••• •••• ••••'
+                      : _formatCardNumber(_cardNumberController.text);
+                  final expiry = _expiryController.text.isEmpty
+                      ? 'MM/YY'
+                      : _expiryController.text;
+                  final name = _nameController.text.isEmpty
+                      ? 'CARDHOLDER NAME'
+                      : _nameController.text.toUpperCase();
+
+                  return Container(
+                    height: 200,
+                    padding: const EdgeInsets.all(24),
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: [
+                          AppTheme.primaryColor.withBlue(150),
+                          AppTheme.primaryColor,
+                        ],
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                      ),
+                      borderRadius: BorderRadius.circular(20),
+                      boxShadow: [
+                        BoxShadow(
+                          color: AppTheme.primaryColor.withOpacity(0.3),
+                          blurRadius: 15,
+                          offset: const Offset(0, 10),
+                        ),
+                      ],
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            const Icon(
+                              Icons.contactless_outlined,
+                              color: Colors.white70,
+                              size: 32,
+                            ),
+                            Text(
+                              'CREDIT CARD',
+                              style: TextStyle(
+                                color: Colors.white.withOpacity(0.8),
+                                fontWeight: FontWeight.bold,
+                                letterSpacing: 1.5,
+                              ),
+                            ),
+                          ],
+                        ),
+                        Text(
+                          cardNumber,
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 22,
+                            fontWeight: FontWeight.bold,
+                            letterSpacing: 2.0,
+                          ),
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const Text(
+                                  'Cardholder',
+                                  style: TextStyle(
+                                    color: Colors.white70,
+                                    fontSize: 10,
+                                  ),
+                                ),
+                                const SizedBox(height: 4),
+                                Text(
+                                  name,
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.bold,
+                                    letterSpacing: 1.2,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const Text(
+                                  'Expires',
+                                  style: TextStyle(
+                                    color: Colors.white70,
+                                    fontSize: 10,
+                                  ),
+                                ),
+                                const SizedBox(height: 4),
+                                Text(
+                                  expiry,
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.bold,
+                                    letterSpacing: 1.2,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              ),
+              const SizedBox(height: 24),
+
               // Cardholder Name
               TextFormField(
                 controller: _nameController,
@@ -229,5 +356,17 @@ class _SettleFineModalState extends ConsumerState<SettleFineModal> {
         ),
       ),
     );
+  }
+
+  String _formatCardNumber(String input) {
+    String number = input.replaceAll(' ', '');
+    String formatted = '';
+    for (int i = 0; i < number.length; i++) {
+      if (i > 0 && i % 4 == 0) {
+        formatted += ' ';
+      }
+      formatted += number[i];
+    }
+    return formatted;
   }
 }

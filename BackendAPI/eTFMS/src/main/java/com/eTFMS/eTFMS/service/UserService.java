@@ -27,6 +27,12 @@ public class UserService {
                 .collect(Collectors.toList());
     }
 
+    public UserResponse getUserById(String id) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+        return mapToResponse(user);
+    }
+
     public UserResponse createUser(RegisterRequest request) {
         if (userRepository.findByUsername(request.getUsername()).isPresent()) {
             throw new IllegalArgumentException("Username already exists");

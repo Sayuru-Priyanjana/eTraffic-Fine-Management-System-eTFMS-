@@ -108,7 +108,7 @@ class FineDetailScreen extends ConsumerWidget {
                     _buildDetailRow(
                       icon: Icons.assignment_late_outlined,
                       label: 'Violation Category',
-                      value: 'Category #${fine.categoryId}',
+                      value: fine.categoryName ?? 'Category #${fine.categoryId}',
                     ),
                     const Divider(height: 24),
                     _buildDetailRow(

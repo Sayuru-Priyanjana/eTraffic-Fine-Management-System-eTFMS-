@@ -3,19 +3,7 @@ import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import Landing from './pages/Landing';
 import QuickPay from './pages/QuickPay';
-import Login from './pages/Login';
-import Register from './pages/Register';
-import Dashboard from './pages/Dashboard';
 import PaymentSuccess from './pages/PaymentSuccess';
-
-// Helper to protect routes that require driver authentication
-function ProtectedRoute({ children }) {
-  const token = localStorage.getItem('token');
-  if (!token) {
-    return <Navigate to="/login" replace />;
-  }
-  return children;
-}
 
 export default function App() {
   console.log("App component: Rendering all routes...");
@@ -30,19 +18,6 @@ export default function App() {
           <Routes>
             <Route path="/" element={<Landing />} />
             <Route path="/quick-pay" element={<QuickPay />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
-            
-            {/* Protected Driver Dashboard Route */}
-            <Route 
-              path="/dashboard" 
-              element={
-                <ProtectedRoute>
-                  <Dashboard />
-                </ProtectedRoute>
-              } 
-            />
-            
             <Route path="/payment-success" element={<PaymentSuccess />} />
             
             {/* Fallback to Home */}

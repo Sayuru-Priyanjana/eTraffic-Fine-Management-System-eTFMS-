@@ -219,8 +219,15 @@ class _SearchDriverScreenState extends ConsumerState<SearchDriverScreen> {
                             fine.referenceNumber,
                             style: const TextStyle(fontWeight: FontWeight.bold),
                           ),
-                          subtitle: Text(
-                            'Issued: ${DateFormat('yyyy-MM-dd').format(fine.issueDate)}',
+                          subtitle: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              if (fine.categoryName != null) 
+                                Text(fine.categoryName!, style: const TextStyle(fontWeight: FontWeight.w500)),
+                              Text(
+                                'Issued: ${DateFormat('yyyy-MM-dd').format(fine.issueDate)}',
+                              ),
+                            ],
                           ),
                           trailing: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
