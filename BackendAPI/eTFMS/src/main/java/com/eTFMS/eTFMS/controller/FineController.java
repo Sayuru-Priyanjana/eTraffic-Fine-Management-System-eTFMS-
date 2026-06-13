@@ -91,4 +91,20 @@ public class FineController {
         com.eTFMS.eTFMS.model.User user = (com.eTFMS.eTFMS.model.User) authentication.getPrincipal();
         return ResponseEntity.ok(fineService.settleFine(id, user.getId()));
     }
+
+    @GetMapping("/public/lookup")
+    public ResponseEntity<FineResponse> lookupFinePublic(
+            @org.springframework.web.bind.annotation.RequestParam String referenceNumber,
+            @org.springframework.web.bind.annotation.RequestParam Long categoryId
+    ) {
+        return ResponseEntity.ok(fineService.lookupFinePublic(referenceNumber, categoryId));
+    }
+
+    @PostMapping("/public/settle")
+    public ResponseEntity<FineResponse> settleFinePublic(
+            @org.springframework.web.bind.annotation.RequestParam String referenceNumber,
+            @org.springframework.web.bind.annotation.RequestParam Long categoryId
+    ) {
+        return ResponseEntity.ok(fineService.settleFinePublic(referenceNumber, categoryId));
+    }
 }
