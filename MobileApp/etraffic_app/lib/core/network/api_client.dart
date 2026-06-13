@@ -6,17 +6,10 @@ import '../secure_storage/session_manager.dart';
 class ApiClient {
   late final Dio _dio;
 
-  // Seamless configuration: Android emulator needs 10.0.2.2, others can use localhost/127.0.0.1
   static String get baseUrl {
-    if (kIsWeb) {
-      return 'http://localhost:8080/api';
-    }
-    try {
-      if (Platform.isAndroid) {
-        return 'http://10.0.2.2:8080/api';
-      }
-    } catch (_) {}
-    return 'http://localhost:8080/api';
+    // Connect to the backend using your computer's local IP address
+    // This allows physical devices on the same Wi-Fi network to access the API.
+    return 'http://192.168.8.105:8080/api';
   }
 
   ApiClient() {

@@ -1,21 +1,36 @@
 import { useState, useEffect } from 'react';
 import { Activity, CreditCard, FileText } from 'lucide-react';
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
+  BarChart,
+  Bar
+} from 'recharts';
 import api from '../api/axios';
 
 export default function Dashboard() {
   const [fines, setFines] = useState([]);
   const [categories, setCategories] = useState([]);
+  const [stats, setStats] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [finesRes, catsRes] = await Promise.all([
+        const [finesRes, catsRes, statsRes] = await Promise.all([
           api.get('/fines'),
           api.get('/categories'),
+          api.get('/dashboard/stats')
         ]);
         setFines(finesRes.data);
         setCategories(catsRes.data);
+        setStats(statsRes.data);
       } catch (err) {
         console.error('Error fetching dashboard data:', err);
       } finally {
@@ -52,7 +67,7 @@ export default function Dashboard() {
   });
 
   return (
-    <div className="max-w-7xl mx-auto space-y-6">
+    <div className="max-w-7xl mx-auto space-y-6 pb-12">
       <div>
         <h2 className="text-2xl font-bold text-gray-900">Dashboard Overview</h2>
         <p className="mt-1 text-sm text-gray-500">
@@ -107,7 +122,59 @@ export default function Dashboard() {
         </div>
       </div>
 
-      <div className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
+      {stats && (
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div className="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
+            <h3 className="text-lg font-medium text-gray-900 mb-4">Income Over Time</h3>
+            <div className="h-80 w-full">
+              <ResponsiveContainer width="100%" height="100%">
+                <LineChart data={stats.incomeOverTime} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
+                  <CartesianGrid strokeDasharray="3 3" vertical={false} />
+                  <XAxis dataKey="date" />
+                  <YAxis />
+                  <Tooltip formatter={(value) => [`LKR ${value.toLocaleString()}`, 'Income']} />
+                  <Legend />
+                  <Line type="monotone" dataKey="value" name="Income" stroke="#16a34a" activeDot={{ r: 8 }} strokeWidth={2} />
+                </LineChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
+
+          <div className="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
+            <h3 className="text-lg font-medium text-gray-900 mb-4">Fines Over Time</h3>
+            <div className="h-80 w-full">
+              <ResponsiveContainer width="100%" height="100%">
+                <LineChart data={stats.finesOverTime} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
+                  <CartesianGrid strokeDasharray="3 3" vertical={false} />
+                  <XAxis dataKey="date" />
+                  <YAxis />
+                  <Tooltip formatter={(value) => [`${value} Fines`, 'Count']} />
+                  <Legend />
+                  <Line type="monotone" dataKey="value" name="Fine Count" stroke="#2563eb" activeDot={{ r: 8 }} strokeWidth={2} />
+                </LineChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
+
+          <div className="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm lg:col-span-2">
+            <h3 className="text-lg font-medium text-gray-900 mb-4">Fines by Category</h3>
+            <div className="h-96 w-full">
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={stats.finesByCategory} margin={{ top: 5, right: 30, left: 20, bottom: 70 }}>
+                  <CartesianGrid strokeDasharray="3 3" vertical={false} />
+                  <XAxis dataKey="categoryName" angle={-45} textAnchor="end" height={80} interval={0} />
+                  <YAxis />
+                  <Tooltip formatter={(value) => [`${value} Fines`, 'Count']} />
+                  <Legend verticalAlign="top" height={36} />
+                  <Bar dataKey="count" name="Fine Count" fill="#8b5cf6" radius={[4, 4, 0, 0]} />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
+        </div>
+      )}
+
+      <div className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden mt-6">
         <div className="px-6 py-5 border-b border-gray-200">
           <h3 className="text-lg font-medium text-gray-900">Fine Breakdown by Category</h3>
         </div>

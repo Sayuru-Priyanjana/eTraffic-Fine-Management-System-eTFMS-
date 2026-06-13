@@ -135,3 +135,9 @@ Authorization: Bearer {{adminToken}}
 ### Settle Fine (Driver Only)
 POST {{baseUrl}}/fines/1/settle
 Authorization: Bearer {{driverToken}}
+
+
+POST http://localhost:8080/api/auth/register
+Content-Type: application/json
+
+

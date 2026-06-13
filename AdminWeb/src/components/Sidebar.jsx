@@ -1,5 +1,5 @@
 import { NavLink } from 'react-router-dom';
-import { LayoutDashboard, Tags, FileText } from 'lucide-react';
+import { LayoutDashboard, Tags, FileText, Shield, Users } from 'lucide-react';
 import { clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 
@@ -9,6 +9,8 @@ export function cn(...inputs) {
 
 const navItems = [
   { name: 'Dashboard', path: '/', icon: LayoutDashboard },
+  { name: 'Police Officers', path: '/officers', icon: Shield },
+  { name: 'Drivers', path: '/drivers', icon: Users },
   { name: 'Fine Categories', path: '/categories', icon: Tags },
   { name: 'Fines', path: '/fines', icon: FileText },
 ];

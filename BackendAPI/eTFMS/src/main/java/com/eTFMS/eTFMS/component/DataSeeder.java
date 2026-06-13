@@ -1,19 +1,26 @@
 package com.eTFMS.eTFMS.component;
 
 import com.eTFMS.eTFMS.model.FineCategory;
+import com.eTFMS.eTFMS.model.Role;
+import com.eTFMS.eTFMS.model.User;
 import com.eTFMS.eTFMS.repository.FineCategoryRepository;
+import com.eTFMS.eTFMS.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
 public class DataSeeder implements CommandLineRunner {
 
     private final FineCategoryRepository fineCategoryRepository;
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public void run(String... args) throws Exception {
@@ -43,6 +50,18 @@ public class DataSeeder implements CommandLineRunner {
 
             fineCategoryRepository.saveAll(defaultCategories);
             System.out.println("Database seeded with default Fine Categories.");
+        }
+
+        if (userRepository.count() == 0) {
+            User admin = User.builder()
+                    .id(UUID.randomUUID().toString())
+                    .username("admin1")
+                    .password(passwordEncoder.encode("password123"))
+                    .role(Role.ADMIN)
+                    .build();
+
+            userRepository.save(admin);
+            System.out.println("Database seeded with default Admin user.");
         }
     }
 }
